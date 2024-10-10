@@ -123,7 +123,28 @@ pub mod utilities {
         buf.remove(x, y);                         // Remove the selected text
         buf.insert(x, rpltxt);                    // Insert new text and
         edtr.buffer().unwrap().unselect();        // Unhighlight text
+
+        println!("\n The buffer with the replacment text is now:  {}", buf.text());
+
     }
+
+
+// In general use '§' as the flag.
+    pub fn txt_flaggedtxt_2vec(txtstr: &String, flag: char) -> Vec<&str> {
+        let usestring = txtstr.trim();
+        //let firstchar = usestring.chars().next().unwrap();
+        let txtvec: Vec<&str> = usestring.split(flag).collect();
+        let mut between_flags_vec: Vec<&str> = Vec::new();
+
+        let mut i = 1;
+        while i < txtvec.len() {
+            between_flags_vec.push(txtvec[i]);
+            i += 2;
+        }
+
+        between_flags_vec
+    }
+
 
 
     /*
