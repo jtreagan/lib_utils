@@ -20,6 +20,6 @@ fltk = { version = "^1.4.32", features = ["fltk-bundled"] }
 #console = "0.15.8"
 
 # Reagan created crates
-lib_jt = {path = "/home/camascounty/programming/rust/mine/lib_jt/"}
-lib_file = {path = "/home/camascounty/programming/rust/mine/lib_file/"}
-lib_input_fltk = {path = "/home/camascounty/programming/rust/mine/lib_input_fltk/"} 
+lib_jt = {path = "/home/jtreagan/programming/rust/mine/lib_jt/"}
+lib_file = {path = "/home/jtreagan/programming/rust/mine/lib_file/"}
+lib_input_fltk = {path = "/home/jtreagan/programming/rust/mine/lib_input_fltk/"} 

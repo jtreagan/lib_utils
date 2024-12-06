@@ -22,23 +22,27 @@ pub mod utilities {
 
    ---------------------------------------------------------- */
 
-    use std::fs::File;
-    use std::io::Read;
-    use fltk::app::{App, quit, set_font_size};
-    use fltk::prelude::{DisplayExt, GroupExt, MenuExt, WidgetBase, WidgetExt};
-    use fltk::{menu, text, window};
-    use fltk::enums::{Color, Shortcut};
-    use fltk::text::{TextBuffer, TextEditor};
+    use std::{fs::File, io::Read, rc::Rc, cell::RefCell};
+    //use fltk::app::{App, quit, set_font_size};
+    //use fltk::prelude::{DisplayExt, GroupExt, MenuExt, WidgetBase, WidgetExt};
+    //use fltk::{menu, text, window};
+    //use fltk::enums::{Color, Shortcut};
+    //use fltk::text::{TextBuffer, TextEditor};
 
-    pub fn util_read_file_to_string(fname: &String) -> String {
-        let mut file = File::open(fname.as_str()).expect("Can't open file!");
+
+    // TODO: Do you really want this function dependent on a RefCell?
+    //          Maybe do conversion to string before calling it?
+    pub fn util_read_file_to_string(fname: &Rc<RefCell<String>>) -> String {
+        let usefname = fname.borrow().clone();
+
+        let mut file = File::open(usefname.as_str()).expect("Can't open file!");
         let mut contents = String::new();
         file.read_to_string(&mut contents).expect("Oops!  Cant read file...");
         contents
     }
 
         // Concatenates a vector of Strings. Places a flag char between pieces.
-    pub fn concat_strvec_flag(stringvec: &mut Vec<String>, flag: char) -> String {
+    pub fn util_concat_strvec_flag(stringvec: &mut Vec<String>, flag: char) -> String {
         let mut i = 1;
         while i < stringvec.len() {
             stringvec[i] = format!("{}{}{}", flag, stringvec[i], flag);
@@ -48,7 +52,7 @@ pub mod utilities {
         newstring
     }
 
-    pub fn concat_strvec(stringvec: &Vec<String>) -> String {
+    pub fn util_concat_strvec(stringvec: &Vec<String>) -> String {
         let mut newstring: String = String::new();
 
         for item in stringvec {
@@ -60,79 +64,14 @@ pub mod utilities {
         newstring
     }
 
-    pub fn get_lastchar(newstr: &String) -> Option<char> {
+    pub fn util_get_lastchar(newstr: &String) -> Option<char> {
         let last_char = newstr.chars().nth(newstr.len() - 1);
         last_char
     }
 
-    pub fn simple_editor(startertxt: &str, winlabel: &str) -> String {
-        let edtr = App::default();
-        let mut buf = text::TextBuffer::default();
-        let mut win = window::Window::default().with_size(800, 300);
-        set_font_size(20);
-        win.set_color(Color::Blue);
-        win.set_label(winlabel);
-        win.make_resizable(true);
-
-        simple_editor_menubar();
-
-        buf.set_text(startertxt);
-        let mut simped = TextEditor::default()
-            .with_size(770, 222)
-            .center_of_parent();
-
-        simped.set_buffer(buf.clone());   // Clone is used here to avoid an ownership error.
-        simped.wrap_mode(text::WrapMode::AtBounds, 0);
-        simped.set_color(Color::White);
-        simped.set_text_size(22);
-        simped.set_text_color(Color::Black);
-
-        win.end();
-        win.show();
-
-        //editor_menubar();
-
-        edtr.run().unwrap();
-
-        buf.text()
-    }
-
-    pub fn simple_editor_menubar() -> menu::MenuBar {
-
-        let mut menubar = menu::MenuBar::new(0, 0, 800, 40, "");
-
-        let quit_idx = menubar.add(
-            "File/Finished\t",
-            Shortcut::None,
-            menu::MenuFlag::Normal,
-            |_| {
-                quit();
-            },
-        );
-        menubar.at(quit_idx).unwrap().set_label_color(Color::Red);
-
-        menubar
-    }
-
-    pub fn replace_highlighted_text(edtr: &TextEditor, buf: &mut TextBuffer, rpltxt: &str) {
-        let (x, y) = match edtr.buffer().unwrap().selection_position() {
-            Some(position) => position,
-            None => panic!("\nError!  Could not find a cursor position in the editor.\n"),
-        };
-
-        buf.remove(x, y);                         // Remove the selected text
-        buf.insert(x, rpltxt);                    // Insert new text and
-        edtr.buffer().unwrap().unselect();        // Unhighlight text
-
-        println!("\n The buffer with the replacment text is now:  {}", buf.text());
-
-    }
-
-
 // In general use '§' as the flag.
-    pub fn txt_flaggedtxt_2vec(txtstr: &String, flag: char) -> Vec<&str> {
+    pub fn util_flaggedtxt_2vec(txtstr: &String, flag: char) -> Vec<&str> {
         let usestring = txtstr.trim();
-        //let firstchar = usestring.chars().next().unwrap();
         let txtvec: Vec<&str> = usestring.split(flag).collect();
         let mut between_flags_vec: Vec<&str> = Vec::new();
 
@@ -167,6 +106,6 @@ pub mod utilities {
             sntnc2vec
         }
 
-     */
+     */  // util_clear_terminal() function
 
 } // End utilities module.
