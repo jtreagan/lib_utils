@@ -23,12 +23,6 @@ pub mod utilities {
    ---------------------------------------------------------- */
 
     use std::{fs::File, io::Read, rc::Rc, cell::RefCell};
-    //use fltk::app::{App, quit, set_font_size};
-    //use fltk::prelude::{DisplayExt, GroupExt, MenuExt, WidgetBase, WidgetExt};
-    //use fltk::{menu, text, window};
-    //use fltk::enums::{Color, Shortcut};
-    //use fltk::text::{TextBuffer, TextEditor};
-
 
     // TODO: Do you really want this function dependent on a RefCell?
     //          Maybe do conversion to string before calling it?
@@ -41,7 +35,15 @@ pub mod utilities {
         contents
     }
 
-        // Concatenates a vector of Strings. Places a flag char between pieces.
+    pub fn util_read_print_to_term(fname: String) {
+        let mut file = File::open(fname.as_str()).expect("Can't open file!");
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).expect("Oops!  Cant read file...");
+
+        println!("{}", contents);
+    }
+
+// Concatenates a vector of Strings. Places a flag char between pieces.
     pub fn util_concat_strvec_flag(stringvec: &mut Vec<String>, flag: char) -> String {
         let mut i = 1;
         while i < stringvec.len() {
@@ -106,6 +108,6 @@ pub mod utilities {
             sntnc2vec
         }
 
-     */  // util_clear_terminal() function
+     */  // util_clear_terminal()  &  divide_string_tovec()  functions.
 
 } // End utilities module.
