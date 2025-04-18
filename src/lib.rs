@@ -4,12 +4,12 @@
                 Miscellaneous utility functions
 */
 
-const VERSION: &str = "0.0.5";
-const AUTHOR: &str = "John T. Reagan";
-const LICENSE: &str = "MIT";
-const LICENSE_URL: &str = "https://opensource.org/licenses/MIT";
-const REPOSITORY: &str = "https://github.com/jtreagan/lib_utils";
-const COPYRIGHT: &str = "Copyright (c) 2025 John T. Reagan";
+pub const _VERSION: &str = "0.0.5";
+pub const _AUTHOR: &str = "John T. Reagan";
+pub const _LICENSE: &str = "MIT";
+pub const _LICENSE_URL: &str = "https://opensource.org/licenses/MIT";
+pub const _REPOSITORY: &str = "https://github.com/jtreagan/lib_utils";
+pub const _COPYRIGHT: &str = "Copyright (c) 2025 John T. Reagan";
 
 
 pub mod utilities {
