@@ -1,3 +1,17 @@
+/*
+                            lib_utils
+
+                Miscellaneous utility functions
+*/
+
+const VERSION: &str = "0.0.5";
+const AUTHOR: &str = "John T. Reagan";
+const LICENSE: &str = "MIT";
+const LICENSE_URL: &str = "https://opensource.org/licenses/MIT";
+const REPOSITORY: &str = "https://github.com/jtreagan/lib_utils";
+const COPYRIGHT: &str = "Copyright (c) 2025 John T. Reagan";
+
+
 pub mod utilities {
     /* ---------------------- quick_editor() --------------------------
 
@@ -22,11 +36,15 @@ pub mod utilities {
 
    ---------------------------------------------------------- */
 
-    use std::{fs::File, io::Read, rc::Rc, cell::RefCell};
+    use std::{fs::File, io::Read, rc::Rc, cell::RefCell, io};
+    use std::io::Write;
 
-    // TODO: Do you really want this function dependent on a RefCell?
-    //          Maybe do conversion to string before calling it?
-    pub fn util_read_file_to_string(fname: &Rc<RefCell<String>>) -> String {
+
+    pub fn util_read_file_to_string_refcell(fname: &Rc<RefCell<String>>) -> String {
+        // TODO: Do you really want this function dependent on a RefCell?
+        //          Maybe do conversion to string before calling it?
+        // TODO: Move this function to the  lib_file  library.
+
         let usefname = fname.borrow().clone();
 
         let mut file = File::open(usefname.as_str()).expect("Can't open file!");
@@ -43,8 +61,9 @@ pub mod utilities {
         println!("{}", contents);
     }
 
-// Concatenates a vector of Strings. Places a flag char between pieces.
     pub fn util_concat_strvec_flag(stringvec: &mut Vec<String>, flag: char) -> String {
+        // Concatenates a vector of Strings. Places a flag char between pieces.
+
         let mut i = 1;
         while i < stringvec.len() {
             stringvec[i] = format!("{}{}{}", flag, stringvec[i], flag);
@@ -71,8 +90,8 @@ pub mod utilities {
         last_char
     }
 
-// In general use '§' as the flag.
     pub fn util_flaggedtxt_2vec(txtstr: &String, flag: char) -> Vec<&str> {
+        // In general use '§' as the flag.
         let usestring = txtstr.trim();
         let txtvec: Vec<&str> = usestring.split(flag).collect();
         let mut between_flags_vec: Vec<&str> = Vec::new();
@@ -84,6 +103,25 @@ pub mod utilities {
         }
 
         between_flags_vec
+    }
+
+    pub fn util_wait_for_enter() {
+        println!("Press 'Enter' to continue... \n");
+        io::stdout().flush().unwrap();  // Flush stdout to ensure the message is displayed immediately
+
+        // Read a single byte from stdin
+        let mut buffer = [0u8; 1];
+        io::stdin().read_exact(&mut buffer).unwrap();
+    }
+
+    pub fn util_longest_string_in_vec(stringvec: &Vec<String>) -> usize {
+        let mut longest_string = 0;
+        for item in stringvec {
+            if item.len() > longest_string {
+                longest_string = item.len();
+            }
+        }
+        longest_string
     }
 
 
