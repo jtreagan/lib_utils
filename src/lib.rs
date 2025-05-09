@@ -184,7 +184,7 @@ println!("\n You chose choice # {}. \n", choice );
 }
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */  // Example for using  activity_menu()  function.
-
+    /// Create a menu of the elements of a vector.
     pub fn activity_menu(opts: &Vec<String>, prompt: &str) -> usize {
         // For a terminal-based menu this works pretty good.  The  opts
         //      vector contains the menu choices.

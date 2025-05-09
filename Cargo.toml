@@ -2,6 +2,11 @@
 name = "lib_utils"
 version = "0.1.0"
 edition = "2021"
+authors = ["John T. Reagan"]
+license = "MIT"
+description = "Misc utility functions."
+readme = "/home/jtreagan/programming/rust/mine/lib_utils/README.MD"
+repository = "https://github.com/jtreagan/lib_utils"
 
 [dependencies]
 #Standard Crates
