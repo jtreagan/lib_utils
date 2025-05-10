@@ -109,18 +109,6 @@ pub mod utilities {
         io::stdin().read_exact(&mut buffer).unwrap();
     }
 
-    /// Returns the length of the longest String in a String vector.
-    ///
-    pub fn util_longest_string_in_vec(stringvec: &Vec<String>) -> usize {
-        let mut longest_string = 0;
-        for item in stringvec {
-            if item.len() > longest_string {
-                longest_string = item.len();
-            }
-        }
-        longest_string
-    }
-
     /// Use the elements of a String vector to create a terminal-based
 /// numbered menu.  Returns the number of the item chosen by the user.
 ///
@@ -326,9 +314,13 @@ pub mod input_utilities {
 
 }
 
+/// Functions that operate on vectors.
+///
 pub mod vec {
     use rand::Rng;
 
+    /// Pick an element randomly.  Return, in a tuple, the element
+    /// along with the it's index in the vector.
     pub fn vec_random_choice<T>(list: &Vec<T>) -> Option<(&T, usize)> {
         if list.is_empty() {
             return None;
@@ -338,6 +330,8 @@ pub mod vec {
         Some((&list[index], index))
     }
 
+    /// Converts a vector of Strings into a vector of &str's.
+    ///
     pub fn vec_string_to_str(list: &Vec<String>) -> Vec<&str> {
         let mut uselist: Vec<&str> = Vec::new();
         let mut i = 0;
@@ -350,21 +344,45 @@ pub mod vec {
         uselist
     }
 
+    /// In a vector of Strings, returns the longest element.
+    /// If more than one element has the longest length, the last
+    /// of those long elements is returned.
+    ///
+    /// # Example
+    ///
+    ///         fn main() {
+    ///             let words = vec!["a limerick".to_string(),
+    ///                             "fall leaves".to_string(),
+    ///                             "snow".to_string(),
+    ///                             "flowers blue".to_string(),
+    ///                             "A really nice sunset".to_string()
+    ///                             ];
+    ///             let longest = vec_longest_str(&words);
+    ///
+    ///             match longest {
+    ///                 Some(word) => println!("\n The longest word in the vector is: {} /n", word),
+    ///                 None => println!("\n The vector is empty. \n"),
+    ///             }
+    ///         }
+    ///
     pub fn vec_longest_str(v: &Vec<String>) -> Option<&String> {
+        // Using `max_by_key()` here is slick and quick, but
+        // I honestly prefer the simple logic I used in the
+        // `vec_longest_string_len()` function below.  Simple
+        // and straightforward is, in my opinion, better coding.
+
         v.iter().max_by_key(|x| x.len())
     }
 
-    /* ---------------------  Example for using vec_longest_str()
-        fn main() {
-            let words = vec!["a limerick".to_string(), "vall leaves".to_string(), "snow".to_string(), "flowers blue".to_string(), "A really nice sunset".to_string()];
-            let longest = vec_longest_str(&words);
-
-            match longest {
-                Some(word) => println!("\nThe longest word is: {}/n", word),
-                None => println!("The vector is empty."),
+    /// Returns the length of the longest String in a String vector.
+    ///
+    pub fn vec_longest_str_len(stringvec: &Vec<String>) -> usize {
+        let mut longest = 0;
+        for item in stringvec {
+            if item.len() > longest {
+                longest = item.len();
             }
         }
-
-     */  //Example for using vec_longest_str()
-
-} // End vec module
+        longest
+    }
+}
