@@ -6,8 +6,7 @@
 //! Their greatest weakness is poor error handling, so keep that
 //! in mind if you choose to use them.  By the way, I need help getting
 //! those weaknesses corrected, so if you feel like taking that on,
-//! please check
-//! out the issues tab in this crate's repository.
+//! please check out the issues tab in this crate's repository.
 //!
 //!   * VERSION = "0.0.5";
 //!   * AUTHOR = "John T. Reagan";
@@ -18,7 +17,8 @@
 //!
 
 
-
+/// Miscellaneous utility functions
+///
 pub mod utilities {
     /* ---------------------- quick_editor() --------------------------
 
@@ -126,17 +126,16 @@ pub mod utilities {
 ///
 /// Requires the following in the Cargo.toml file:
 ///
-/// [dependencies]
-/// dialoguer = { version = "0.11.0", features = ["completion"]}
+///     [dependencies]
+///     dialoguer = { version = "0.11.0", features = ["completion"]}
 ///
 /// # Example:
 ///
 ///     fn main() {
-///
 ///         let opts: Vec<String> = vec!["Activity 1".to_string(),
 ///                 "Activity 2".to_string(),
 ///                 "Activity 3".to_string(),
-///         ];
+///                 ];
 ///
 ///         let choice = util_activity_menu(&opts, "This is a prompt. Use up and down arrows to select.  Enter to confirm.");
 ///
@@ -147,6 +146,7 @@ pub mod utilities {
 ///             2 => println!("\n 22222222222"),
 ///             3 => println!("\n 33333333333"),
 ///         }
+///     }
     pub fn util_activity_menu(opts: &Vec<String>, prompt: &str) -> usize {
         // For a terminal-based menu this works pretty good.  The  opts
         //      vector contains the menu choices.
@@ -190,20 +190,17 @@ pub mod utilities {
 
 }
 
-
-
+/// Functions that facilitate terminal-based data input.
+///
 pub mod input_utilities {
-    // Note that these are all terminal-based functions that don't
-    //      require a GUI.
 
     use std::io;
     use std::io::Write;
     use std::str::FromStr;
 
+    /// Prompts user to enter an integer within a given range.
+    ///
     pub fn input_num_prompt_range(prompt: &str, min: i64, max: i64) -> i64 {
-        // Changed in choice_menu.rs
-        // use std::io::{self, Write};
-
         loop {
             print!("{}", prompt);
             let _ = io::stdout().flush().expect("Failed to flush stdout.");
@@ -228,6 +225,8 @@ pub mod input_utilities {
         }
     }
 
+    /// Prompts user to enter a number of any numerical type.
+    ///
     pub fn input_num_prompt<U: FromStr>(prompt: &str) -> U {
         //use std::io::{self, Write};
 
@@ -250,6 +249,8 @@ pub mod input_utilities {
         }
     }
 
+    /// Prompts user to enter a String.
+    ///
     pub fn input_string_prompt(prompt: &str) -> String {
         //use std::io::{self, Write};
 
@@ -261,6 +262,8 @@ pub mod input_utilities {
         input.trim().to_string()
     }
 
+    /// Prompts user to enter a character.
+    ///
     pub fn input_char_prompt(message: &str) -> char {
         let word = input_string_prompt(message);
         let mut letter = word.chars();
@@ -269,6 +272,8 @@ pub mod input_utilities {
         character
     }
 
+    /// Prompts user to enter a bool.  Allows for several forms of
+    /// true or false responses.
     pub fn input_bool_prompt(message: &str) -> bool {
         let mut value: String;
         let truth_value: bool;
@@ -319,7 +324,7 @@ pub mod input_utilities {
         truth_value
     }
 
-} // End input_utilities module
+}
 
 pub mod vec {
     use rand::Rng;
