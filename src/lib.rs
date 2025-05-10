@@ -1,16 +1,22 @@
-/*
-                            lib_utils
+//!# Miscellaneous utility functions
+//!
+//! I've used the functions in the modules of this crate
+//! in several different projects,
+//! which is why I've kept them together in a separate crate.
+//! Their greatest weakness is poor error handling, so keep that
+//! in mind if you choose to use them.  By the way, I need help getting
+//! those weaknesses corrected, so if you feel like taking that on,
+//! please check
+//! out the issues tab in this crate's repository.
+//!
+//!   * VERSION = "0.0.5";
+//!   * AUTHOR = "John T. Reagan";
+//!   * LICENSE = "MIT";
+//!   * LICENSE_URL = "<https://opensource.org/licenses/MIT>";
+//!   * REPOSITORY = "<https://github.com/jtreagan/lib_utils>";
+//!   * COPYRIGHT = "Copyright (c) 2025 John T. Reagan";
+//!
 
-                Miscellaneous utility functions
-
-VERSION = "0.0.5";
-AUTHOR = "John T. Reagan";
-LICENSE = "MIT";
-LICENSE_URL = "https://opensource.org/licenses/MIT";
-REPOSITORY = "https://github.com/jtreagan/lib_utils";
-COPYRIGHT = "Copyright (c) 2025 John T. Reagan";
-
-*/  // Credits
 
 
 pub mod utilities {
@@ -37,34 +43,13 @@ pub mod utilities {
 
    ---------------------------------------------------------- */
 
-    use std::{fs::File, io::Read, rc::Rc, cell::RefCell, io};
+    use dialoguer::Select;
     use std::io::Write;
+    use std::{io, io::Read};
 
-
-    pub fn util_read_file_to_string_refcell(fname: &Rc<RefCell<String>>) -> String {
-        // TODO: Do you really want this function dependent on a RefCell?
-        //          Maybe do conversion to string before calling it?
-        // TODO: Move this function to the  lib_file  library.
-
-        let usefname = fname.borrow().clone();
-
-        let mut file = File::open(usefname.as_str()).expect("Can't open file!");
-        let mut contents = String::new();
-        file.read_to_string(&mut contents).expect("Oops!  Cant read file...");
-        contents
-    }
-
-    pub fn util_read_print_to_term(fname: String) {
-        let mut file = File::open(fname.as_str()).expect("Can't open file!");
-        let mut contents = String::new();
-        file.read_to_string(&mut contents).expect("Oops!  Cant read file...");
-
-        println!("{}", contents);
-    }
-
+    /// Concatenates a vector of Strings. Places a flag char between pieces.
+    ///
     pub fn util_concat_strvec_flag(stringvec: &mut Vec<String>, flag: char) -> String {
-        // Concatenates a vector of Strings. Places a flag char between pieces.
-
         let mut i = 1;
         while i < stringvec.len() {
             stringvec[i] = format!("{}{}{}", flag, stringvec[i], flag);
@@ -74,6 +59,8 @@ pub mod utilities {
         newstring
     }
 
+    /// Concatenate a vector of Strings into a single String
+    /// that is then returned.
     pub fn util_concat_strvec(stringvec: &Vec<String>) -> String {
         let mut newstring: String = String::new();
 
@@ -86,13 +73,18 @@ pub mod utilities {
         newstring
     }
 
+    /// Returns the very last character of a String.
+    ///
     pub fn util_get_lastchar(newstr: &String) -> Option<char> {
         let last_char = newstr.chars().nth(newstr.len() - 1);
         last_char
     }
 
+    /// Breaks up a String that contains flag characters, saving the sections
+    /// between the flags as elements of a vector that is then returned.
     pub fn util_flaggedtxt_2vec(txtstr: &String, flag: char) -> Vec<&str> {
-        // In general use '§' as the flag.
+        //! Any character can be used as the flag.  The author generally
+        //! uses '§' as the flag.
         let usestring = txtstr.trim();
         let txtvec: Vec<&str> = usestring.split(flag).collect();
         let mut between_flags_vec: Vec<&str> = Vec::new();
@@ -106,6 +98,8 @@ pub mod utilities {
         between_flags_vec
     }
 
+    /// Does just what the name says.  Waits for the user to press `Enter`
+    /// before continuing execution.
     pub fn util_wait_for_enter() {
         println!("Press 'Enter' to continue... \n");
         io::stdout().flush().unwrap();  // Flush stdout to ensure the message is displayed immediately
@@ -115,6 +109,8 @@ pub mod utilities {
         io::stdin().read_exact(&mut buffer).unwrap();
     }
 
+    /// Returns the length of the longest String in a String vector.
+    ///
     pub fn util_longest_string_in_vec(stringvec: &Vec<String>) -> usize {
         let mut longest_string = 0;
         for item in stringvec {
@@ -125,67 +121,33 @@ pub mod utilities {
         longest_string
     }
 
-
-
-    /*
-
-        pub fn util_clear_terminal() {
-            print!("{}[2J", 27 as char);
-            io::stdout().flush().unwrap();
-            print!("{}[1;1H", 27 as char); // Move the cursor to the top-left corner
-        }
-
-
-        pub fn divide_string_tovec(sentences: &String, flag: char) -> Vec<String> {
-            let tempstore: Vec<&str> = sentences.split(flag).collect();
-
-            // Convert tempstore to vec of Strings.
-            let sntnc2vec: Vec<String> = tempstore
-                .into_iter()
-                .map(|s| s.to_string())
-                .collect();
-            sntnc2vec
-        }
-
-     */  // util_clear_terminal()  &  divide_string_tovec()  functions.
-
-} // End utilities module.
-
-pub mod misc {
-
-    use dialoguer::Select;
-
-    /* ~~~~~~~~~~~~~~  Menu Function Documentaion  ~~~~~~~~~~~~~~~
-
-----------------------------------
-Requires the following in the Cargo.toml file:
-
-[dependencies]
-dialoguer = { version = "0.11.0", features = ["completion"] }
-console = "0.15.8"
-
-----------------------------------
-
-Example:
-
-fn main() {
-
-let opts: Vec<String> = vec!["Activity 1".to_string(),
-            "Activity 2".to_string(),
-            "Activity 3".to_string(),
-            "Activity 4".to_string(),
-            "Activity 5".to_string(),
-            "Activity 6".to_string(),
-            "Activity 7".to_string(),];
-
-let choice = activity_menu(&opts, "This is a prompt);
-
-println!("\n You chose choice # {}. \n", choice );
-}
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */  // Example for using  activity_menu()  function.
-    /// Create a menu of the elements of a vector.
-    pub fn activity_menu(opts: &Vec<String>, prompt: &str) -> usize {
+    /// Use the elements of a String vector to create a terminal-based
+/// numbered menu.  Returns the number of the item chosen by the user.
+///
+/// Requires the following in the Cargo.toml file:
+///
+/// [dependencies]
+/// dialoguer = { version = "0.11.0", features = ["completion"]}
+///
+/// # Example:
+///
+///     fn main() {
+///
+///         let opts: Vec<String> = vec!["Activity 1".to_string(),
+///                 "Activity 2".to_string(),
+///                 "Activity 3".to_string(),
+///         ];
+///
+///         let choice = util_activity_menu(&opts, "This is a prompt. Use up and down arrows to select.  Enter to confirm.");
+///
+///         println!("\n You chose choice # {}. \n", choice );
+///
+///         match choice {
+///             1 => println!("\n 11111111111"),
+///             2 => println!("\n 22222222222"),
+///             3 => println!("\n 33333333333"),
+///         }
+    pub fn util_activity_menu(opts: &Vec<String>, prompt: &str) -> usize {
         // For a terminal-based menu this works pretty good.  The  opts
         //      vector contains the menu choices.
         let choice: usize;
@@ -203,7 +165,32 @@ println!("\n You chose choice # {}. \n", choice );
         };
         choice
     }
-} // End of misc module
+
+    /*
+
+    pub fn util_clear_terminal() {
+        print!("{}[2J", 27 as char);
+        io::stdout().flush().unwrap();
+        print!("{}[1;1H", 27 as char); // Move the cursor to the top-left corner
+    }
+
+
+    pub fn divide_string_tovec(sentences: &String, flag: char) -> Vec<String> {
+        let tempstore: Vec<&str> = sentences.split(flag).collect();
+
+        // Convert tempstore to vec of Strings.
+        let sntnc2vec: Vec<String> = tempstore
+            .into_iter()
+            .map(|s| s.to_string())
+            .collect();
+        sntnc2vec
+    }
+
+ */  // util_clear_terminal()  &  divide_string_tovec()  functions.
+
+}
+
+
 
 pub mod input_utilities {
     // Note that these are all terminal-based functions that don't
