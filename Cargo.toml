@@ -1,11 +1,11 @@
 [package]
 name = "lib_utils"
 version = "0.1.2"
-edition = "2021"
+edition = "2024"
 authors = ["John T. Reagan"]
 license = "MIT"
 description = "Misc utility functions."
-readme = "/home/jtreagan/programming/rust/mine/lib_utils/README.MD"
+readme = "README.MD"
 repository = "https://github.com/jtreagan/lib_utils"
 
 [dependencies]
