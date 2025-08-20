@@ -374,8 +374,8 @@ pub mod vec {
         v.iter().max_by_key(|x| x.len())
     }
 
-    /// Returns the length of the longest String in a String vector.
-    ///
+    /// Returns the length of the longest String in a String vector
+    ///     in bytes.  Don't mistake this for pixels.
     pub fn vec_longest_str_len(stringvec: &Vec<String>) -> usize {
         let mut longest = 0;
         for item in stringvec {

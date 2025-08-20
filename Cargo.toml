@@ -1,11 +1,12 @@
 [package]
 name = "lib_utils"
-version = "0.1.3"
-edition = "2024"
+version = "0.1.4"
+edition = "2021"
 authors = ["John T. Reagan"]
 license = "MIT"
 description = "Misc utility functions."
 readme = "README.MD"
+documentation = "https://docs.rs/lib_utils"
 repository = "https://github.com/jtreagan/lib_utils"
 
 [dependencies]
