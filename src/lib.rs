@@ -176,7 +176,73 @@ pub mod utilities {
 
  */  // util_clear_terminal()  &  divide_string_tovec()  functions.
 
+
+    /// Prints elements of a given slice in pairs,formatted in a 
+    /// column-like structure. 
+    ///
+    /// # Parameters
+    /// - `numvec`: A reference to a slice containing elements that implement 
+    ///     the `Display` trait.
+    ///
+    /// # Behavior
+    /// - Iterates through the slice `numvec` and prints its elements in pairs.
+    /// - Each pair is formatted as `element1, element2` and printed in a 
+    ///     separate line.
+    /// - If the number of elements in the slice is odd the final remaining 
+    ///     element (unpaired) is printed on its own line.
+    ///
+    /// # Example
+    /// ```
+    /// let numbers = vec![1, 2, 3, 4, 5];
+    /// print_pairs_col(&numbers);
+    /// // Output:
+    /// //
+    /// //          1, 2
+    /// //          3, 4
+    /// //          5
+    /// //
+    /// let fruits = vec!["apple", "banana", "orange"];
+    /// print_pairs_col(&fruits);
+    /// // Output:
+    /// //
+    /// //          apple, banana
+    /// //          orange
+    /// //
+    /// ```
+    ///
+    /// # Notes
+    /// - The function ensures proper formatting by including additional spacing 
+    ///     and newline characters.
+    /// - Elements must implement the `Display` trait to allow formatting 
+    ///     using `format!` and `println!`.
+    ///
+    /// # Complexity
+    /// - Time complexity: O(n), where `n` is the number of elements in the slice.
+    /// - Space complexity: O(1), as it operates directly on the input slice 
+    ///     without allocating additional memory.
+    ///
+    pub fn outpt_print_pairs_col<T: std::fmt::Display>(numvec: &[T]) {
+        println!("\n");  // Pad the terminal display, for readability.
+
+        // Loop until we reach the last element or the last pair
+        let mut i = 0;
+        while i + 1 < numvec.len() {
+            let line = format!("\t\t\t{}, {}", numvec[i], numvec[i + 1]);
+            println!("{}", line);
+            i += 2;
+        }
+
+        if numvec.len() % 2 != 0 {
+            // If odd number of elements, print last element.
+            println!("\t\t\t{}", numvec[numvec.len() - 1]);
+        }
+
+        println!("\n");  // Pad the terminal display, for readability.
+    }
+    
+
 }
+
 
 /// Functions that facilitate terminal-based data input.
 ///
@@ -213,10 +279,52 @@ pub mod input_utilities {
         }
     }
 
-    /// Prompts user to enter a number of any numerical type.
+    /// Prompts the user with a custom message to input a value, then reads and 
+    /// parses the input into the specified type.
+    ///
+    /// # Type Parameters
+    /// * `U` - The type the input will be parsed into. This type must implement
+    /// the `FromStr` trait.
+    ///
+    /// # Parameters
+    /// * `prompt` - A string slice that represents the message to display 
+    /// to the user before waiting for input.
+    ///
+    /// # Returns
+    /// * `U` - The parsed value of the user's input, converted into the 
+    /// specified type.
+    ///
+    /// # Behavior
+    /// The function repeatedly prompts the user for input until a valid 
+    /// value of the specified type (`U`) is entered. If the input
+    /// cannot be parsed into the desired type, the function will ignore the 
+    /// invalid input and prompt the user again.
+    /// 
+    /// # Weaknesses
+    /// Does not allow for breaking the loop until the user enters a valid value.
+    ///
+    /// # Panics
+    /// The function will panic in the following scenarios:
+    /// * If flushing `stdout` fails.
+    /// * If reading the user's input from `stdin` encounters an error.
+    ///
+    /// # Example
+    /// 
+    ///     use std::str::FromStr;
+    /// 
+    ///     main() {
+    ///          let num: i32 = input_num_prompt("Please enter a number: ");
+    ///          println!("You entered: {}", num);
+    ///     }
+    ///
+    /// # Notes
+    /// Ensure that the type `U` is compatible with the format of the input expected from the user. For example, if `U` is `i32`,
+    /// the user must enter valid integers.
     ///
     pub fn input_num_prompt<U: FromStr>(prompt: &str) -> U {
         //use std::io::{self, Write};
+        // todo: Change to return a Result & eliminate the loop.
+        //    Or, at least make a similar function that will do that.
 
         loop {
             print!("{}", prompt);
