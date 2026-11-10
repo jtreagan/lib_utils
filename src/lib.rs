@@ -243,7 +243,6 @@ pub mod utilities {
 
 }
 
-
 /// Functions that facilitate terminal-based data input.
 ///
 pub mod input_utilities {
@@ -492,5 +491,55 @@ pub mod vec {
             }
         }
         longest
+    }
+}
+
+/// Math-based functions.
+///
+pub mod math_functions {
+    use num_traits::pow;
+    use rand::distributions::uniform::SampleUniform;
+    use rand::{thread_rng, Rng};
+
+    /// Round an f64 to a given decimal place.
+    ///
+    pub fn math_round_to_place_f64(num: &f64, place: usize) -> f64 {
+        let factor = pow(10, place);
+
+        (num * factor as f64).round() / factor as f64
+    }
+
+    /// Generate and return a random number between the given min and max.
+    ///
+    /// Example:
+    ///
+    ///     fn main() {
+    ///         let choice: i64 = math_gen_random_num(-9, 9);
+    ///
+    ///         println!("\n Your random number is:   {} \n", choice);
+    ///     }
+    ///
+    pub fn math_gen_random_num<T: SampleUniform + PartialOrd>(min: T, max: T) -> T {
+        let mut rng = thread_rng();
+        rng.gen_range(min..=max)
+    }
+} // End   math_functions   module
+
+/// Miscellaneous helper functions
+///
+pub mod misc {
+    /// Parses a string of numeric characters returning an f64.
+    ///
+    pub fn str_to_f64(s: &str) -> f64 {
+        s.trim().parse::<f64>().unwrap()
+    }
+
+    /// Tests a given string for being numeric.
+    ///
+    pub fn is_num(lttrs: &str) -> bool {
+        if !lttrs.is_empty() && lttrs.chars().all(|www| www.is_numeric() || www == '.') {
+            return true;
+        }
+        false
     }
 }
